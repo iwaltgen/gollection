@@ -288,6 +288,26 @@ func TestQueueIndexOf(t *testing.T) {
 	}
 }
 
+func TestQueuePollRemoveUntil(t *testing.T) {
+	queue := New()
+	queue.Add("a", "b", "c")
+	queue.Add("d", "e", "f")
+
+	index := queue.IndexOf(func(v interface{}) bool { return v.(string) == "c" })
+	assert.Equal(t, 2, index)
+
+	count := index
+	elements, ok := queue.PollUntil(count)
+	assert.Len(t, elements, count)
+	assert.Equal(t, []interface{}{"a", "b"}, elements)
+	assert.True(t, ok)
+
+	count = queue.Size()
+	ok = queue.RemoveUntil(count)
+	assert.True(t, ok)
+	assert.True(t, queue.Empty())
+}
+
 func TestQueueRemove(t *testing.T) {
 	queue := New()
 	queue.Add("a")
