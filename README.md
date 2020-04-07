@@ -1,2 +1,1 @@
-# go-collection
-Go Data Structures
+# Go Collection (Data Structures)
