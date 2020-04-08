@@ -34,3 +34,5 @@ jobs:
         file: ./coverage.txt
         flags: unittests
         name: master-unittests
+
+    - uses: creekorful/goreportcard-action@v1
