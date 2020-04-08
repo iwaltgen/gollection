@@ -1,6 +1,7 @@
 package circularqueue
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -382,6 +383,15 @@ func TestQueueValues(t *testing.T) {
 
 	values := queue.Values()
 	assert.Equal(t, list, values)
+
+	var vstrings []string
+	for _, v := range list {
+		vstrings = append(vstrings, v.(string))
+	}
+
+	qstring := queue.String()
+	assert.True(t, strings.Contains(qstring, "CircularQueue"))
+	assert.True(t, strings.Contains(qstring, strings.Join(vstrings, ", ")))
 }
 
 func benchmarkElement(b *testing.B, queue *Queue, size int) {
