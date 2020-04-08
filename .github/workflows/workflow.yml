@@ -35,4 +35,4 @@ jobs:
         flags: unittests
         name: master-unittests
 
-    - uses: creekorful/goreportcard-action@v1
+    - uses: creekorful/goreportcard-action@v1.0
