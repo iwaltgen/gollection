@@ -276,9 +276,9 @@ func TestQueueIndexOf(t *testing.T) {
 		predicate func(interface{}) bool
 		expected  int
 	}{
-		{"predicate-a", func(v interface{}) bool { return v.(string) == "a" }, 0},
-		{"predicate-b", func(v interface{}) bool { return v.(string) == "b" }, 1},
-		{"predicate-c", func(v interface{}) bool { return v.(string) == "c" }, 2},
+		{"PredicateA", func(v interface{}) bool { return v.(string) == "a" }, 0},
+		{"PredicateB", func(v interface{}) bool { return v.(string) == "b" }, 1},
+		{"PredicateC", func(v interface{}) bool { return v.(string) == "c" }, 2},
 	}
 
 	for _, data := range dataset {
