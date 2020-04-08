@@ -279,6 +279,7 @@ func TestQueueIndexOf(t *testing.T) {
 		{"PredicateA", func(v interface{}) bool { return v.(string) == "a" }, 0},
 		{"PredicateB", func(v interface{}) bool { return v.(string) == "b" }, 1},
 		{"PredicateC", func(v interface{}) bool { return v.(string) == "c" }, 2},
+		{"PredicateD", func(v interface{}) bool { return v.(string) == "d" }, -1},
 	}
 
 	for _, data := range dataset {
@@ -305,6 +306,14 @@ func TestQueuePollRemoveUntil(t *testing.T) {
 	count = queue.Size()
 	ok = queue.RemoveUntil(count)
 	assert.True(t, ok)
+	assert.True(t, queue.Empty())
+
+	_, ok = queue.PollUntil(1)
+	assert.False(t, ok)
+	assert.True(t, queue.Empty())
+
+	ok = queue.RemoveUntil(1)
+	assert.False(t, ok)
 	assert.True(t, queue.Empty())
 }
 
@@ -351,14 +360,28 @@ func TestQueueElement(t *testing.T) {
 }
 
 func TestQueueClear(t *testing.T) {
-	queue := New()
-	queue.Add("e", "f", "g", "a", "b", "c", "d")
+	queue := New(FixedSize(16))
+	queue.Add("a", "b", "c", "d", "e", "f", "g", "h")
 
-	assert.False(t, queue.Empty())
+	assert.Equal(t, 16, queue.Capacity())
+	assert.Equal(t, 8, queue.Size())
 
 	queue.Clear()
 	assert.True(t, queue.Empty())
 	assert.Zero(t, queue.Size())
+	assert.Equal(t, 16, queue.Capacity())
+}
+
+func TestQueueValues(t *testing.T) {
+	queue := New()
+
+	list := []interface{}{"a", "b", "c", "d", "e", "f", "g", "h"}
+	queue.Add(list...)
+
+	assert.False(t, queue.Empty())
+
+	values := queue.Values()
+	assert.Equal(t, list, values)
 }
 
 func benchmarkElement(b *testing.B, queue *Queue, size int) {
