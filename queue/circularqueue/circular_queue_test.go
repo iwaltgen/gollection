@@ -55,7 +55,7 @@ func TestQueueAddOverwrite(t *testing.T) {
 	assert.Equal(t, "d", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.RemoveUntil(4))
+	assert.True(t, queue.Remove(4))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "i", element)
@@ -98,13 +98,13 @@ func TestQueueAddGrow(t *testing.T) {
 	assert.Equal(t, "b", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.RemoveUntil(5))
+	assert.True(t, queue.Remove(5))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "h", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.Remove())
+	assert.True(t, queue.Remove(1))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "j", element)
@@ -146,13 +146,13 @@ func TestQueueAddGrowShrink(t *testing.T) {
 	assert.Equal(t, "b", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.RemoveUntil(5))
+	assert.True(t, queue.Remove(5))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "h", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.Remove())
+	assert.True(t, queue.Remove(1))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "j", element)
@@ -199,13 +199,13 @@ func TestQueueShrinkGuaranteedSize(t *testing.T) {
 	assert.Equal(t, "b", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.RemoveUntil(6))
+	assert.True(t, queue.Remove(6))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "i", element)
 	assert.True(t, ok)
 
-	assert.True(t, queue.Remove())
+	assert.True(t, queue.Remove(1))
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "k", element)
@@ -290,7 +290,7 @@ func TestQueueIndexOf(t *testing.T) {
 	}
 }
 
-func TestQueuePollRemoveUntil(t *testing.T) {
+func TestQueueTake(t *testing.T) {
 	queue := New()
 	queue.Add("a", "b", "c")
 	queue.Add("d", "e", "f")
@@ -299,21 +299,21 @@ func TestQueuePollRemoveUntil(t *testing.T) {
 	assert.Equal(t, 2, index)
 
 	count := index
-	elements, ok := queue.PollUntil(count)
+	elements, ok := queue.Take(count)
 	assert.Len(t, elements, count)
 	assert.Equal(t, []interface{}{"a", "b"}, elements)
 	assert.True(t, ok)
 
 	count = queue.Size()
-	ok = queue.RemoveUntil(count)
+	ok = queue.Remove(count)
 	assert.True(t, ok)
 	assert.True(t, queue.Empty())
 
-	_, ok = queue.PollUntil(1)
+	_, ok = queue.Take(1)
 	assert.False(t, ok)
 	assert.True(t, queue.Empty())
 
-	ok = queue.RemoveUntil(1)
+	ok = queue.Remove(1)
 	assert.False(t, ok)
 	assert.True(t, queue.Empty())
 }
@@ -323,11 +323,15 @@ func TestQueueRemove(t *testing.T) {
 	queue.Add("a")
 	queue.Add("b", "c")
 
-	assert.True(t, queue.Remove())
+	assert.True(t, queue.Remove(2))
+	assert.False(t, queue.Remove(2))
+	assert.True(t, queue.Remove(1))
+	assert.False(t, queue.Remove(1))
 
-	assert.True(t, queue.Remove())
-	assert.True(t, queue.Remove())
-	assert.False(t, queue.Remove())
+	queue.Add("d", "e")
+	assert.True(t, queue.Remove(1))
+	assert.True(t, queue.Remove(1))
+	assert.False(t, queue.Remove(1))
 
 	assert.True(t, queue.Empty())
 	assert.Zero(t, queue.Size())
@@ -354,7 +358,7 @@ func TestQueueElement(t *testing.T) {
 	assert.Nil(t, element)
 	assert.False(t, ok)
 
-	queue.Remove()
+	queue.Remove(1)
 	element, ok = queue.Element(0)
 	assert.Equal(t, "b", element)
 	assert.True(t, ok)
@@ -384,6 +388,9 @@ func TestQueueValues(t *testing.T) {
 	values := queue.Values()
 	assert.Equal(t, list, values)
 
+	// TODO: empty queue values test
+
+	// TODO: separate string test
 	var vstrings []string
 	for _, v := range list {
 		vstrings = append(vstrings, v.(string))
@@ -413,7 +420,7 @@ func benchmarkAdd(b *testing.B, queue *Queue, size int) {
 func benchmarkRemove(b *testing.B, queue *Queue, size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
-			queue.Remove()
+			queue.Remove(1)
 		}
 	}
 }

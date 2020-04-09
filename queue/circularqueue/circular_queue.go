@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Queue is circular queue
+// Queue is circular queue.
 type Queue struct {
 	elements       []interface{}
 	size           int     // available elements count
@@ -15,7 +15,7 @@ type Queue struct {
 	guaranteedSize int     // prevent shrink when less than guaranteed size[default: 8] (8 means size less than 8 never shrink)
 }
 
-// New instantiates a new empty queue
+// New instantiates a new empty queue.
 func New(opts ...Option) *Queue {
 	queue := &Queue{}
 	for _, opt := range opts {
@@ -29,7 +29,7 @@ func New(opts ...Option) *Queue {
 	return queue
 }
 
-// Add appends a value at the end of the queue
+// Add appends a value at the back of the queue.
 func (queue *Queue) Add(values ...interface{}) {
 	if 0.0 < queue.growthFactor {
 		count := len(values)
@@ -66,7 +66,7 @@ func (queue *Queue) Peek() (interface{}, bool) {
 	return queue.elements[queue.base], true
 }
 
-// Poll get one element from the queue front.
+// Poll get one element from front of the queue.
 func (queue *Queue) Poll() (interface{}, bool) {
 	if queue.size == 0 {
 		return nil, false
@@ -81,8 +81,8 @@ func (queue *Queue) Poll() (interface{}, bool) {
 	return value, true
 }
 
-// PollUntil get the elements at the given count from the queue front.
-func (queue *Queue) PollUntil(count int) ([]interface{}, bool) {
+// Take get the elements at the given count from front of the queue.
+func (queue *Queue) Take(count int) ([]interface{}, bool) {
 	if queue.size < count {
 		return nil, false
 	}
@@ -100,22 +100,8 @@ func (queue *Queue) PollUntil(count int) ([]interface{}, bool) {
 	return values, true
 }
 
-// Remove remove one element from the queue front.
-func (queue *Queue) Remove() bool {
-	if queue.size == 0 {
-		return false
-	}
-
-	queue.elements[queue.base] = nil
-	queue.size--
-	queue.base = queue.elementIndex(1)
-
-	queue.shrink()
-	return true
-}
-
-// RemoveUntil removes the elements at the given count from the queue front.
-func (queue *Queue) RemoveUntil(count int) bool {
+// Remove removes the elements at the given count from front of the queue.
+func (queue *Queue) Remove(count int) bool {
 	if queue.size < count {
 		return false
 	}
@@ -140,7 +126,7 @@ func (queue *Queue) Element(index int) (interface{}, bool) {
 	return queue.elements[queue.elementIndex(index)], true
 }
 
-// IndexOf returns index of provided predicate
+// IndexOf returns index of provided predicate.
 func (queue *Queue) IndexOf(predicate func(interface{}) bool) int {
 	if queue.size == 0 {
 		return -1
@@ -158,6 +144,11 @@ func (queue *Queue) IndexOf(predicate func(interface{}) bool) int {
 // Empty returns true if queue does not contain any elements.
 func (queue *Queue) Empty() bool {
 	return queue.size == 0
+}
+
+// Full returns true if queue size equals capacity.
+func (queue *Queue) Full() bool {
+	return queue.size == cap(queue.elements)
 }
 
 // Size returns number of elements within the queue.
@@ -203,7 +194,7 @@ func (queue *Queue) withinRange(index int) bool {
 	return index >= 0 && index < queue.size
 }
 
-// append elements index
+// next add elements index
 func (queue *Queue) writerIndex() int {
 	return queue.elementIndex(queue.size)
 }
