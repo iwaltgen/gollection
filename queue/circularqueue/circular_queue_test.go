@@ -388,9 +388,21 @@ func TestQueueValues(t *testing.T) {
 	values := queue.Values()
 	assert.Equal(t, list, values)
 
-	// TODO: empty queue values test
+	assert.True(t, queue.Remove(queue.Size()))
+	assert.True(t, queue.Empty())
 
-	// TODO: separate string test
+	values = queue.Values()
+	assert.Len(t, values, 0)
+}
+
+func TestQueueString(t *testing.T) {
+	queue := New()
+
+	list := []interface{}{"a", "b", "c", "d", "e", "f", "g", "h"}
+	queue.Add(list...)
+
+	assert.False(t, queue.Empty())
+
 	var vstrings []string
 	for _, v := range list {
 		vstrings = append(vstrings, v.(string))
