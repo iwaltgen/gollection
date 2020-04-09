@@ -37,6 +37,7 @@ func TestQueueAddOverwrite(t *testing.T) {
 	capacity := 8
 	assert.Equal(t, capacity, queue.Capacity())
 	assert.Equal(t, capacity, queue.Size())
+	assert.True(t, queue.Full())
 
 	element, ok := queue.Peek()
 	assert.Equal(t, "a", element)
@@ -67,6 +68,7 @@ func TestQueueAddOverwrite(t *testing.T) {
 
 	assert.True(t, queue.Empty())
 	assert.Equal(t, capacity, queue.Capacity())
+	assert.False(t, queue.Full())
 }
 
 func TestQueueAddGrow(t *testing.T) {
@@ -79,6 +81,7 @@ func TestQueueAddGrow(t *testing.T) {
 	capacity := 8
 	assert.Equal(t, capacity, queue.Capacity())
 	assert.Equal(t, capacity, queue.Size())
+	assert.True(t, queue.Full())
 
 	element, ok := queue.Peek()
 	assert.Equal(t, "a", element)
@@ -89,6 +92,7 @@ func TestQueueAddGrow(t *testing.T) {
 	doubleCapacity := int((capacity + 2) * 2.0)
 	assert.Equal(t, doubleCapacity, queue.Capacity())
 	assert.Equal(t, 10, queue.Size())
+	assert.False(t, queue.Full())
 
 	element, ok = queue.Poll()
 	assert.Equal(t, "a", element)
