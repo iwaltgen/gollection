@@ -1,4 +1,4 @@
-module github.com/iwaltgen/collection
+module github.com/iwaltgen/gollection
 
 go 1.14
 
