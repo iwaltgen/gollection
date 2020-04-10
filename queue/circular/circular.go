@@ -1,4 +1,6 @@
-// Package circular is a circular queue package
+// Package circular implements circular queue
+//
+// reference: https://en.wikipedia.org/wiki/Circular_buffer
 package circular
 
 import (
