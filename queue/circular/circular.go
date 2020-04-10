@@ -1,4 +1,4 @@
-package circularqueue
+package circular
 
 import (
 	"fmt"
@@ -180,7 +180,7 @@ func (queue *Queue) Values() []interface{} {
 
 // Stqueue returns a stqueue representation of container
 func (queue *Queue) String() string {
-	str := "CircularQueue\n"
+	str := "Circular\n"
 	values := make([]string, 0, queue.size)
 	for i := 0; i < queue.size; i++ {
 		values = append(values, fmt.Sprintf("%v", queue.elements[queue.elementIndex(i)]))

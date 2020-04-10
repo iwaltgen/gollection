@@ -1,4 +1,4 @@
-package circularqueue
+package circular
 
 // Option is create queue option
 type Option func(queue *Queue)

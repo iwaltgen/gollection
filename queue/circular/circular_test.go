@@ -1,4 +1,4 @@
-package circularqueue
+package circular
 
 import (
 	"strings"
@@ -413,7 +413,7 @@ func TestQueueString(t *testing.T) {
 	}
 
 	qstring := queue.String()
-	assert.True(t, strings.Contains(qstring, "CircularQueue"))
+	assert.True(t, strings.Contains(qstring, "Circular"))
 	assert.True(t, strings.Contains(qstring, strings.Join(vstrings, ", ")))
 }
 
