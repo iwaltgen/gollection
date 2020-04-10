@@ -1,3 +1,4 @@
+// Package circular is a circular queue package
 package circular
 
 import (
@@ -178,7 +179,7 @@ func (queue *Queue) Values() []interface{} {
 	return values
 }
 
-// Stqueue returns a stqueue representation of container
+// String returns a string representation of container
 func (queue *Queue) String() string {
 	str := "Circular\n"
 	values := make([]string, 0, queue.size)
