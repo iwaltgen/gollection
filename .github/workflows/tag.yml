@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 jobs:
-  docker:
+  tag:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
 
       - name: tag script
         id: tag
-        uses: actions/github-script@1.0.0
+        uses: actions/github-script@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
