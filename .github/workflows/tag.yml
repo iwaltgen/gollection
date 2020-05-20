@@ -12,10 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: tag test
-        run: echo ${GITHUB_REF##v*/}
-
-      - name: tag script
+      - name: github script
         id: tag
         uses: actions/github-script@v1
         with:
