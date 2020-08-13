@@ -1,4 +1,4 @@
-# Gollection is Go Collection (Data Structures)
+# Gollection implements Data Structures on the Go language.
 
 [![tests](https://github.com/iwaltgen/gollection/workflows/tests/badge.svg)](https://github.com/iwaltgen/gollection/actions)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/iwaltgen/gollection)](https://pkg.go.dev/github.com/iwaltgen/gollection)
